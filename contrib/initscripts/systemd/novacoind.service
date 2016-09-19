@@ -1,0 +1,11 @@
+[Unit]
+Description=SSUCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=SSUCoin
+ExecStart=/opt/SSUCoin/SSUCoind
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,2 @@
+debian/bin/SSUCoind usr/bin
+src/SSUCoind usr/lib/SSUCoin

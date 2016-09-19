@@ -1,0 +1,5 @@
+SSUCoin-qt usr/bin
+share/pixmaps/SSUCoin32.xpm usr/share/pixmaps
+share/pixmaps/SSUCoin80.xpm usr/share/pixmaps
+debian/SSUCoin-qt.desktop usr/share/applications
+debian/SSUCoin-qt.protocol usr/share/kde4/services/

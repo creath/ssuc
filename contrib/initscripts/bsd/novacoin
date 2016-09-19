@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: SSUCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# SSUCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable SSUCoin service.
+# SSUCoin_config (path): Set to /usr/local/etc/SSUCoin.conf by default.
+# SSUCoin_user:  The user account SSUCoin daemon runs as. It uses 'root' user by default.
+# SSUCoin_group: The group account SSUCoin daemon runs as. It uses 'wheel' group by default.
+# SSUCoin_datadir (str): Default to "/var/db/SSUCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=SSUCoin
+rcvar=SSUCoin_enable
+
+: ${SSUCoin_enable:=NO}
+: ${SSUCoin_config=/usr/local/etc/SSUCoin.conf}
+: ${SSUCoin_datadir=/var/db/SSUCoin}
+: ${SSUCoin_user="root"}
+: ${SSUCoin_group="wheel"}
+
+required_files=${SSUCoin_config}
+command=/usr/local/bin/SSUCoind
+SSUCoin_chdir=${SSUCoin_datadir}
+pidfile="${SSUCoin_datadir}/SSUCoind.pid"
+stop_cmd=SSUCoin_stop
+command_args="-conf=${SSUCoin_config} -datadir=${SSUCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+SSUCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${SSUCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${SSUCoin_user}:${SSUCoin_group} ${SSUCoin_datadir}
+}
+
+SSUCoin_prestart()
+{
+	if [ ! -d "${SSUCoin_datadir}/." ]; then
+		SSUCoin_create_datadir || return 1
+	fi
+}
+
+SSUCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+SSUCoin_stop()
+{
+    SSUCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${SSUCoin_config} -datadir=${SSUCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

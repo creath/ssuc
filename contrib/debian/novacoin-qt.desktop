@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=SSUCoin
+Comment=SSUCoin P2P Cryptocurrency
+Comment[ru]=SSUCoin, P2P криптовалюта
+Comment[fr]=SSUCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=SSUCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/SSUCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/SSUCoin80.xpm
+MimeType=x-scheme-handler/SSUCoin;
+Categories=Office;
